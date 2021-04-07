@@ -1,1 +1,92 @@
-// TODO
+.container {
+  margin: 3rem auto 5rem;
+
+  .banner {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .post {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    width: 720px;
+    margin: 5rem auto;
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+
+      h1 {
+        font-weight: 700;
+        font-size: 3rem;
+        line-height: 3.75rem;
+        color: var(--heading);
+        letter-spacing: -0.5px;
+
+        width: 720px;
+        margin: 0.5rem 0;
+      }
+
+      section {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        color: var(--info);
+
+        margin: 1.5rem 0 4.125rem;
+        width: 720px;
+
+        div {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 0.875rem;
+
+          margin-right: 1.5rem;
+
+          svg {
+            display: block;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+
+    .content {
+      width: 720px;
+      
+      strong {
+        display: block;
+
+        font-size: 2rem;
+        font-weight: bold;
+        line-height: 1.625rem;
+        
+        color: var(--heading);
+        margin: 2rem 0;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
+      .contentBody {
+        font-size: 1.125rem;
+        line-height: 1.5rem;    
+        text-align: justify;
+
+        color: var(--body);
+
+        margin: 1rem auto 0;
+      }
+    }
+  }
+}
