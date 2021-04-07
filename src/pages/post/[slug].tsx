@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Prismic from '@prismicio/client';
 import { useRouter } from 'next/router';
+import Header from '../../components/Header';
 
 import { getPrismicClient } from '../../services/prismic';
 import { format } from 'date-fns';
@@ -14,10 +15,11 @@ import { FiCalendar, FiUser, FiClock } from 'react-icons/fi';
 import { RichText } from 'prismic-dom';
 
 interface Post {
+  uid: string;
   first_publication_date: string | null;
-  first_publication_date_formatted: string | null;
   data: {
     title: string;
+    subtitle: string;
     banner: {
       url: string;
     };
@@ -43,7 +45,7 @@ export default function Post({ post }: PostProps) {
   }
 
   const totalWords = RichText.asText(
-    post.data.content.reduce((acc, item) => 
+    post.data.content.reduce((acc, item) =>
       [...acc, ...item.body], [])
   ).split(' ').length;
 
@@ -52,8 +54,10 @@ export default function Post({ post }: PostProps) {
   return (
     <>
       <Head>
-        <title> {post?.data.title} | SpaceTraveling</title>
+        <title> {post?.data.title ?? 'Carregando...'} | SpaceTraveling</title>
       </Head>
+
+      <Header />
 
       <main className={styles.container}>
         <img
@@ -68,7 +72,13 @@ export default function Post({ post }: PostProps) {
             <section>
               <div>
                 <FiCalendar size={'1.25rem'} />
-                <time>{post.first_publication_date_formatted}</time>
+                <time>
+                  {format(
+                    new Date(post.first_publication_date),
+                    "dd MMM yyyy",
+                    { locale: ptBR }
+                  )}
+                </time>
               </div>
 
               <div>
@@ -86,7 +96,7 @@ export default function Post({ post }: PostProps) {
           <div className={styles.content}>
             {post.data.content.map(item => {
               return (
-                <>
+                <div key={post.uid}>
                   <strong>{item.heading}</strong>
                   {item.body.map(item => (
                     <div
@@ -95,7 +105,7 @@ export default function Post({ post }: PostProps) {
                     />
                   ))}
 
-                </>
+                </div>
               )
             })}
           </div>
@@ -141,14 +151,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const post = {
     uid: response.uid,
-    first_publication_date_formatted: format(
-      new Date(response.first_publication_date),
-      "dd MMM yyyy",
-      { locale: ptBR }
-    ),
     first_publication_date: response.first_publication_date,
     data: {
       title: response.data.title,
+      subtitle: response.data.subtitle,
       banner: {
         url: response.data.banner.url,
       },
