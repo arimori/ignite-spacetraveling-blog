@@ -1,20 +1,23 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
-import Prismic from '@prismicio/client';
 import { GetStaticProps } from 'next';
+
+import Prismic from '@prismicio/client';
 import { getPrismicClient } from '../services/prismic';
+
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
 import { FiCalendar, FiUser } from 'react-icons/fi';
+
+import Header from '../components/Header';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
 interface Post {
   uid?: string;
-  first_publication_date_formatted: string | null;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -30,7 +33,6 @@ interface PostPagination {
 
 interface HomeProps {
   postsPagination: PostPagination;
-  next_page: string;
 }
 
 export default function Home({ postsPagination }: HomeProps) {
@@ -68,6 +70,8 @@ export default function Home({ postsPagination }: HomeProps) {
         <title>Home | SpaceTraveling</title>
       </Head>
 
+      <Header />
+      
       <main className={commonStyles.container}>
         <div className={styles.posts}>
           {posts.map(post => (
@@ -78,8 +82,14 @@ export default function Home({ postsPagination }: HomeProps) {
 
                 <section>
                   <div>
-                    <FiCalendar size={'1.25rem'}/>
-                    <time>{post.first_publication_date_formatted}</time>
+                    <FiCalendar size={'1.25rem'} />
+                    <time>
+                      {format(
+                        new Date(post.first_publication_date),
+                        "dd MMM yyyy",
+                        { locale: ptBR }
+                      )}
+                    </time>
                   </div>
 
                   <div>
@@ -120,11 +130,6 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
       uid: post.uid,
       first_publication_date: post.first_publication_date,
-      first_publication_date_formatted: format(
-        new Date(post.first_publication_date),
-        "dd MMM yyyy",
-        { locale: ptBR }
-      ),
       data: {
         title: post.data.title,
         subtitle: post?.data.subtitle,
