@@ -72,10 +72,6 @@
         
         color: var(--heading);
         margin: 2rem 0;
-
-        &:first-child {
-          margin-top: 0;
-        }
       }
 
       .contentBody {
@@ -85,7 +81,7 @@
 
         color: var(--body);
 
-        margin: 1rem auto 0;
+        margin: 1rem 0;
       }
     }
   }
